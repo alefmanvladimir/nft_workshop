@@ -4,18 +4,21 @@ import { NetworkProvider } from '@ton-community/blueprint';
 
 export async function run(provider: NetworkProvider) {
     const OFFCHAIN_CONTENT_PREFIX = 0x01;
-    const metadata_link = "https://gateway.pinata.cloud/ipfs/QmX6fM6JswHdab9MXSAx82YsexE83cWCws3WbEGGbgj4qW/"
+    const metadata_link =
+        'https://violet-fantastic-marlin-52.mypinata.cloud/ipfs/QmQfx8GsreZkQ3eXpa8MMZoYX6kYRoGgcp45bbiPUTmnki/';
 
     let content = beginCell().storeInt(OFFCHAIN_CONTENT_PREFIX, 8).storeStringRefTail(metadata_link).endCell();
-    
+
     let owner = provider.sender().address!;
-    
-    const nftCollection = provider.open(await NftCollection.fromInit(owner, content, {
-        $$type: "RoyaltyParams",
-        numerator: 350n, // 350n = 35%
-        denominator: 1000n,
-        destination: owner,
-    }));
+
+    const nftCollection = provider.open(
+        await NftCollection.fromInit(owner, content, {
+            $$type: 'RoyaltyParams',
+            numerator: 350n, // 350n = 35%
+            denominator: 1000n,
+            destination: owner,
+        })
+    );
 
     await nftCollection.send(
         provider.sender(),

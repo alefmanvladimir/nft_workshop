@@ -4,14 +4,14 @@ import { NetworkProvider } from '@ton-community/blueprint';
 import { Mint, NftCollection } from '../wrappers/NftCollection';
 
 export async function run(provider: NetworkProvider) {
-    const nft_collection_address = Address.parse("EQDPjNZYRWUDcrmjY7sFzqXz-UX_gWU_WwFC7MWNThmyAjjW")
+    const nft_collection_address = Address.parse('EQDAIhRmdIIK0jskJOoCkzpHK2Mv3OItURCSVQvvSJeUYVLk');
 
     const nftCollection = provider.open(NftCollection.fromAddress(nft_collection_address));
-    
+
     const message: Mint = {
         $$type: 'Mint',
-        query_id: 0n
-    }
+        query_id: 0n,
+    };
 
     await nftCollection.send(
         provider.sender(),
@@ -21,14 +21,13 @@ export async function run(provider: NetworkProvider) {
         message
     );
 
-    const collectionData = await nftCollection.getGetCollectionData()
-    const nftItemAddress = await nftCollection.getGetNftAddressByIndex(collectionData.next_item_index)
+    const collectionData = await nftCollection.getGetCollectionData();
+    const nftItemAddress = await nftCollection.getGetNftAddressByIndex(collectionData.next_item_index);
 
     await provider.waitForDeploy(nftItemAddress as Address);
 
     // run methods on `nftItem`
 }
-function encodeNftItem(arg0: string): import("ton-core").Cell {
+function encodeNftItem(arg0: string): import('ton-core').Cell {
     throw new Error('Function not implemented.');
 }
-
